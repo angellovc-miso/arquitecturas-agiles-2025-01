@@ -1,4 +1,4 @@
-from productos import create_app
+from . import create_app
 from flask_restful import Api, Resource
 from healthcheck import HealthCheck, EnvironmentDump
 import psutil
