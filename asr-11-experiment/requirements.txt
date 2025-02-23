@@ -1,0 +1,6 @@
+Flask==1.1.2
+Flask-RESTful==0.3.9
+py-healthcheck==1.10.1
+psutil==7.0.0
+requests==2.32.3
+APScheduler==3.11.0
