@@ -27,7 +27,9 @@ api = Api(app)
 
 class VistaProductos(Resource):
     def get(self):
-
+        startTime = time.time()
+        delay_ms = random.randint(300, 6000)
+        time.sleep(delay_ms / 1000.0)
         productos_list = []
 
         for item in range(random.randint(100, 500)):
@@ -44,6 +46,13 @@ class VistaProductos(Resource):
                 "es_alta_demanda": fake.pybool()
             }
             productos_list.append(producto)
+
+        endTime = time.time()
+        elapsedTime = endTime - startTime
+
+        if delay_ms > 5000:
+            logging.warning(f"Request took {elapsedTime} ms, which is longer than expected.")
+            # enviar mensaje por slack
 
         return jsonify(productos_list)
 
