@@ -18,10 +18,10 @@ app.get('/optimizacion_envios', (c):any => {
     coordinate_system: "Node - Delivery optimization service",
   };
 
-  if (requestCount % 20 === 0) {
+  if (requestCount % 10 === 0) {
     const keys = ["altitude", "latitude", "longitude"];
     const randomKey = keys[Math.floor(Math.random() * keys.length)];
-    coordinates[randomKey] += (Math.random() - 0.5) * 0.1; // Slight random variation
+    coordinates[randomKey] += (Math.random() - 0.5) * 0.5; // Slight random variation
   }
 
   return c.json(coordinates);

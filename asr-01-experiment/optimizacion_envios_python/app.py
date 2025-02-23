@@ -1,9 +1,18 @@
 from flask import Flask, jsonify
+import time
 
 app = Flask(__name__)
+request_count = 0
+
 
 @app.route('/optimizacion_envios', methods=['GET'])
 def get_envios():
+    global request_count
+    request_count = request_count + 1
+
+    if request_count % 30 == 0:
+        time.sleep(10)
+
     return jsonify(
         {
           "altitude": 15.2,

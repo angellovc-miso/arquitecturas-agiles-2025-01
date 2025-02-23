@@ -1,0 +1,397 @@
+
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Service Error Report</title>
+        <style>
+            body { font-family: Arial, sans-serif; margin: 20px; padding: 20px; }
+            h1 { color: #333; }
+            table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+            th, td { padding: 10px; border: 1px solid #ddd; text-align: left; }
+            th { background-color: #f4f4f4; }
+            .summary { margin-top: 20px; padding: 10px; background: #eef; border-radius: 5px; }
+        </style>
+    </head>
+    <body>
+        <h1>Service Error Report</h1>
+        
+        <div class="summary">
+            <h2>Global Metrics</h2>
+            <p><strong>Total Requests:</strong> 300</p>
+            <p><strong>Experiment Duration:</strong> 3 Mins</p>
+            <p><strong>Requests Per Second:</strong> 1.67</p>
+        </div>
+
+        <div class="summary">
+            <h2>Voting Service Metrics</h2>
+            <p><strong>Total detected errors:</strong> 40</p>
+            <p><strong>Optimizacion Envios output errors:</strong> 30</p>
+            <p><strong>Optimizacion Envios timeout errors:</strong> 10</p>
+            <p><strong>Successful Requests:</strong> 260 / 300</p>
+            <p><strong>Success Ratio:</strong> 86.67%</p>
+        </div>
+
+        <div class="summary">
+            <h2>End User Metrics</h2>
+            <p><strong>Timeout Errors Reached End User:</strong> 0</p>
+            <p><strong>Output Errors Reached End User:</strong> 0</p>
+            <p><strong>Percentage of Errors Reached End User:</strong> 0.00%</p>
+            <p><strong>Masked Errors by Voting Service:</strong> 100.00%</p>
+        </div>
+
+        <h2>Connection Errors</h2>
+        <table>
+            <tr>
+                <th>Implementation</th>
+                <th>Service</th>
+                <th>Error</th>
+            </tr>
+            
+                <tr>
+                    <td>Python</td>
+                    <td>http://python_server:3000/optimizacion_envios</td>
+                    <td>TIMEOUT &gt; 5seg</td>
+                </tr>
+            
+                <tr>
+                    <td>Python</td>
+                    <td>http://python_server:3000/optimizacion_envios</td>
+                    <td>TIMEOUT &gt; 5seg</td>
+                </tr>
+            
+                <tr>
+                    <td>Python</td>
+                    <td>http://python_server:3000/optimizacion_envios</td>
+                    <td>TIMEOUT &gt; 5seg</td>
+                </tr>
+            
+                <tr>
+                    <td>Python</td>
+                    <td>http://python_server:3000/optimizacion_envios</td>
+                    <td>TIMEOUT &gt; 5seg</td>
+                </tr>
+            
+                <tr>
+                    <td>Python</td>
+                    <td>http://python_server:3000/optimizacion_envios</td>
+                    <td>TIMEOUT &gt; 5seg</td>
+                </tr>
+            
+                <tr>
+                    <td>Python</td>
+                    <td>http://python_server:3000/optimizacion_envios</td>
+                    <td>TIMEOUT &gt; 5seg</td>
+                </tr>
+            
+                <tr>
+                    <td>Python</td>
+                    <td>http://python_server:3000/optimizacion_envios</td>
+                    <td>TIMEOUT &gt; 5seg</td>
+                </tr>
+            
+                <tr>
+                    <td>Python</td>
+                    <td>http://python_server:3000/optimizacion_envios</td>
+                    <td>TIMEOUT &gt; 5seg</td>
+                </tr>
+            
+                <tr>
+                    <td>Python</td>
+                    <td>http://python_server:3000/optimizacion_envios</td>
+                    <td>TIMEOUT &gt; 5seg</td>
+                </tr>
+            
+                <tr>
+                    <td>Python</td>
+                    <td>http://python_server:3000/optimizacion_envios</td>
+                    <td>TIMEOUT &gt; 5seg</td>
+                </tr>
+            
+        </table>
+
+        <h2>Masked Errors</h2>
+        <table>
+            <tr>
+                <th>Implementation</th>
+                <th>Service</th>
+                <th>Altitude</th>
+                <th>Latitude</th>
+                <th>Longitude</th>
+                <th>Duration</th>
+            </tr>
+            
+                <tr>
+                    <td>Node</td>
+                    <td>http://node_server:3000/optimizacion_envios</td>
+                    <td>15.176996137119508</td>
+                    <td>37.7749</td>
+                    <td>-122.4194</td>
+                    <td>4</td>
+                </tr>
+            
+                <tr>
+                    <td>Node</td>
+                    <td>http://node_server:3000/optimizacion_envios</td>
+                    <td>15.379512839638119</td>
+                    <td>37.7749</td>
+                    <td>-122.4194</td>
+                    <td>3</td>
+                </tr>
+            
+                <tr>
+                    <td>Node</td>
+                    <td>http://node_server:3000/optimizacion_envios</td>
+                    <td>14.988865658251278</td>
+                    <td>37.7749</td>
+                    <td>-122.4194</td>
+                    <td>2</td>
+                </tr>
+            
+                <tr>
+                    <td>Node</td>
+                    <td>http://node_server:3000/optimizacion_envios</td>
+                    <td>15.2</td>
+                    <td>37.889649559939144</td>
+                    <td>-122.4194</td>
+                    <td>2</td>
+                </tr>
+            
+                <tr>
+                    <td>Node</td>
+                    <td>http://node_server:3000/optimizacion_envios</td>
+                    <td>15.273038051356243</td>
+                    <td>37.7749</td>
+                    <td>-122.4194</td>
+                    <td>3</td>
+                </tr>
+            
+                <tr>
+                    <td>Node</td>
+                    <td>http://node_server:3000/optimizacion_envios</td>
+                    <td>15.2</td>
+                    <td>37.947335759193436</td>
+                    <td>-122.4194</td>
+                    <td>2</td>
+                </tr>
+            
+                <tr>
+                    <td>Node</td>
+                    <td>http://node_server:3000/optimizacion_envios</td>
+                    <td>15.2</td>
+                    <td>37.94334304949386</td>
+                    <td>-122.4194</td>
+                    <td>8</td>
+                </tr>
+            
+                <tr>
+                    <td>Node</td>
+                    <td>http://node_server:3000/optimizacion_envios</td>
+                    <td>15.00740182676602</td>
+                    <td>37.7749</td>
+                    <td>-122.4194</td>
+                    <td>3</td>
+                </tr>
+            
+                <tr>
+                    <td>Node</td>
+                    <td>http://node_server:3000/optimizacion_envios</td>
+                    <td>15.2</td>
+                    <td>37.7749</td>
+                    <td>-122.53958790618807</td>
+                    <td>3</td>
+                </tr>
+            
+                <tr>
+                    <td>Node</td>
+                    <td>http://node_server:3000/optimizacion_envios</td>
+                    <td>15.2</td>
+                    <td>37.84869169848825</td>
+                    <td>-122.4194</td>
+                    <td>4</td>
+                </tr>
+            
+                <tr>
+                    <td>Node</td>
+                    <td>http://node_server:3000/optimizacion_envios</td>
+                    <td>15.2</td>
+                    <td>37.75710047589747</td>
+                    <td>-122.4194</td>
+                    <td>2</td>
+                </tr>
+            
+                <tr>
+                    <td>Node</td>
+                    <td>http://node_server:3000/optimizacion_envios</td>
+                    <td>15.319398091875813</td>
+                    <td>37.7749</td>
+                    <td>-122.4194</td>
+                    <td>10</td>
+                </tr>
+            
+                <tr>
+                    <td>Node</td>
+                    <td>http://node_server:3000/optimizacion_envios</td>
+                    <td>15.177177736887266</td>
+                    <td>37.7749</td>
+                    <td>-122.4194</td>
+                    <td>3</td>
+                </tr>
+            
+                <tr>
+                    <td>Node</td>
+                    <td>http://node_server:3000/optimizacion_envios</td>
+                    <td>15.2</td>
+                    <td>37.7749</td>
+                    <td>-122.19719994302201</td>
+                    <td>6</td>
+                </tr>
+            
+                <tr>
+                    <td>Node</td>
+                    <td>http://node_server:3000/optimizacion_envios</td>
+                    <td>15.2</td>
+                    <td>37.7749</td>
+                    <td>-122.43187618585347</td>
+                    <td>3</td>
+                </tr>
+            
+                <tr>
+                    <td>Node</td>
+                    <td>http://node_server:3000/optimizacion_envios</td>
+                    <td>15.2</td>
+                    <td>37.7749</td>
+                    <td>-122.40760863424858</td>
+                    <td>3</td>
+                </tr>
+            
+                <tr>
+                    <td>Node</td>
+                    <td>http://node_server:3000/optimizacion_envios</td>
+                    <td>15.371786088327308</td>
+                    <td>37.7749</td>
+                    <td>-122.4194</td>
+                    <td>4</td>
+                </tr>
+            
+                <tr>
+                    <td>Node</td>
+                    <td>http://node_server:3000/optimizacion_envios</td>
+                    <td>15.094820849834537</td>
+                    <td>37.7749</td>
+                    <td>-122.4194</td>
+                    <td>3</td>
+                </tr>
+            
+                <tr>
+                    <td>Node</td>
+                    <td>http://node_server:3000/optimizacion_envios</td>
+                    <td>15.2</td>
+                    <td>37.7749</td>
+                    <td>-122.50986107848286</td>
+                    <td>3</td>
+                </tr>
+            
+                <tr>
+                    <td>Node</td>
+                    <td>http://node_server:3000/optimizacion_envios</td>
+                    <td>15.2</td>
+                    <td>37.7749</td>
+                    <td>-122.27007561571533</td>
+                    <td>3</td>
+                </tr>
+            
+                <tr>
+                    <td>Node</td>
+                    <td>http://node_server:3000/optimizacion_envios</td>
+                    <td>15.2</td>
+                    <td>37.94068480573979</td>
+                    <td>-122.4194</td>
+                    <td>5</td>
+                </tr>
+            
+                <tr>
+                    <td>Node</td>
+                    <td>http://node_server:3000/optimizacion_envios</td>
+                    <td>15.2</td>
+                    <td>37.613911693856394</td>
+                    <td>-122.4194</td>
+                    <td>5</td>
+                </tr>
+            
+                <tr>
+                    <td>Node</td>
+                    <td>http://node_server:3000/optimizacion_envios</td>
+                    <td>15.2</td>
+                    <td>37.88537786794304</td>
+                    <td>-122.4194</td>
+                    <td>8</td>
+                </tr>
+            
+                <tr>
+                    <td>Node</td>
+                    <td>http://node_server:3000/optimizacion_envios</td>
+                    <td>15.2</td>
+                    <td>37.7749</td>
+                    <td>-122.20026271410434</td>
+                    <td>6</td>
+                </tr>
+            
+                <tr>
+                    <td>Node</td>
+                    <td>http://node_server:3000/optimizacion_envios</td>
+                    <td>15.132564312796632</td>
+                    <td>37.7749</td>
+                    <td>-122.4194</td>
+                    <td>5</td>
+                </tr>
+            
+                <tr>
+                    <td>Node</td>
+                    <td>http://node_server:3000/optimizacion_envios</td>
+                    <td>15.142338138288876</td>
+                    <td>37.7749</td>
+                    <td>-122.4194</td>
+                    <td>5</td>
+                </tr>
+            
+                <tr>
+                    <td>Node</td>
+                    <td>http://node_server:3000/optimizacion_envios</td>
+                    <td>15.020827245796955</td>
+                    <td>37.7749</td>
+                    <td>-122.4194</td>
+                    <td>4</td>
+                </tr>
+            
+                <tr>
+                    <td>Node</td>
+                    <td>http://node_server:3000/optimizacion_envios</td>
+                    <td>15.2</td>
+                    <td>37.74688503296638</td>
+                    <td>-122.4194</td>
+                    <td>3</td>
+                </tr>
+            
+                <tr>
+                    <td>Node</td>
+                    <td>http://node_server:3000/optimizacion_envios</td>
+                    <td>15.312761313361579</td>
+                    <td>37.7749</td>
+                    <td>-122.4194</td>
+                    <td>3</td>
+                </tr>
+            
+                <tr>
+                    <td>Node</td>
+                    <td>http://node_server:3000/optimizacion_envios</td>
+                    <td>15.209174412451295</td>
+                    <td>37.7749</td>
+                    <td>-122.4194</td>
+                    <td>2</td>
+                </tr>
+            
+        </table>
+    </body>
+    </html>

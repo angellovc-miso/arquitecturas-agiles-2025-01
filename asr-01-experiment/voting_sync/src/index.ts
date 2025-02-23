@@ -3,7 +3,31 @@ import { Hono } from 'hono'
 import axios from 'axios';
 import { cors } from 'hono/cors'
 
+let historical:any = {
+  connectionErrors: [],
+  maskedErrors: [],
+  successfulRequests: 0,
+  requests: 0
+}
 
+
+// Add request timestamp before sending
+axios.interceptors.request.use((config:any) => {
+  config.metadata = { startTime: Date.now() };
+  return config;
+});
+
+// Measure response time when request completes
+axios.interceptors.response.use((response:any) => {
+  response.duration = Date.now() - response.config.metadata.startTime;
+  return response;
+});
+
+axios.interceptors.response.use((response:any) => {
+  response.duration = Date.now() - response.config.metadata.startTime;
+  response.config.duration = Date.now() - response.config.metadata.startTime;
+  return response;
+});
 
 const app = new Hono()
 
@@ -14,38 +38,78 @@ app.get('/', (c) => {
 });
 
 const ENVIOS_SERVERS = [
-  process.env.API_ENVIOS_C || 'http://localhost:3003/envios',
-  process.env.API_ENVIOS_NODE || 'http://localhost:3002/envios',
-  process.env.API_ENVIOS_PYTHON || 'http://localhost:3003/envios'
+  process.env.API_ENVIOS_C || 'http://localhost:3003/optimizacion_envios',
+  process.env.API_ENVIOS_NODE || 'http://localhost:3002/optimizacion_envios',
+  process.env.API_ENVIOS_PYTHON || 'http://localhost:3001/optimizacion_envios'
 ];
+
+const ENVIOS_SERVER_IMPLEMENTATION = [
+  'C',
+  'Node',
+  'Python'
+]
 
 app.get('/envios', async (c) => {
 
-  const enviosResponsePromises = ENVIOS_SERVERS.map(server => axios.get(server));
+  historical.requests++;
+  let capturedError = false;
 
-  const enviosResponses = (await Promise.allSettled(enviosResponsePromises)).map((res, index) => {
+  const enviosResponsePromises = ENVIOS_SERVERS.map((server) => axios.get(server, { timeout: 4500 }));
+  const enviosResponses = (await Promise.allSettled(enviosResponsePromises)).map((res:any, index) => {
     if (res.status === "fulfilled") {
-      return { service: ENVIOS_SERVERS[index], ...res.value.data };
+      return { implementation: ENVIOS_SERVER_IMPLEMENTATION[index], service: ENVIOS_SERVERS[index], ...res.value.data, duration: res.value.duration };
     } else {
-      return { service: ENVIOS_SERVERS[index], error: res.reason };
+      return { implementation: ENVIOS_SERVER_IMPLEMENTATION[index], service: ENVIOS_SERVERS[index], error:  res.reason.code === 'ECONNABORTED' ? "TIMEOUT > 5seg" : (res.reason.message || res.reason.code) };
     }
   });
 
+  const enviosResponseSuccessful = enviosResponses.filter(r => !r.error);
+  const enviosResponseErrors = enviosResponses.filter(r => r.error);
+  if (enviosResponseErrors.length > 0) {
+    historical.connectionErrors.push(...enviosResponseErrors);
+    capturedError = true;
+  }
+
   // Detecting response deviations
   const deviatedResponses = Array.from(new Set(['latitude', 'longitude', 'altitude']
-    .map(field => spotObjectDiscrepancies(enviosResponses, field))
+    .map(field => spotObjectDiscrepancies(enviosResponseSuccessful, field))
     .flat()));
     console.log(deviatedResponses)
 
   // Masking deviated answers
   if (deviatedResponses.length > 0) {
     console.log('Masking deviated responses', deviatedResponses)
-    const commonResponse = enviosResponses.filter(responses => responses !== deviatedResponses);
+    const commonResponse = enviosResponseSuccessful.filter(response => !deviatedResponses.includes(response));;
+    historical.maskedErrors.push({
+      errors: deviatedResponses,
+      expectedResponse: commonResponse,
+    });
+    capturedError = true;
     return c.json(commonResponse[Math.floor(Math.random() * commonResponse.length)]);
   } 
 
-  return c.json(enviosResponses[Math.floor(Math.random() * enviosResponses.length)]);
+  if (capturedError === false) {
+    historical.successfulRequests++
+  }
+
+  return c.json(enviosResponseSuccessful[Math.floor(Math.random() * enviosResponseSuccessful.length)]);
 });
+
+app.get('/envios/historical', (c) => {
+  return c.json(historical);
+});
+
+app.get('/envios/historical/clean', (c) => {
+  historical = {
+    connectionErrors: [],
+    maskedErrors: [],
+    successfulRequests: 0,
+    requests: 0
+  };
+  return c.json({status: 'Historical cleaned'});
+})
+
+
 
 serve({
   fetch: app.fetch,
