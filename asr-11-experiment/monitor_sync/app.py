@@ -10,7 +10,7 @@ app_context.push()
 def check_health():
     try:
         print("Verificando estado del microservicio...")
-        response = requests.get('http://127.0.0.1:5002/healthcheck')
+        response = requests.get('https://productos-dd34100bf79d.herokuapp.com/healthcheck')
         if response.status_code == 200:
             print("Microservicio funcionando correctamente.")
         else:
