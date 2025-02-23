@@ -27,8 +27,26 @@ api = Api(app)
 
 class VistaProductos(Resource):
     def get(self):
-        return {'productos': 'productos'}
-    
+
+        productos_list = []
+
+        for item in range(random.randint(100, 500)):
+            valor_unitario = random.randint(50, 100000)
+            cantidad = random.randint(1, 1000)
+            producto = {
+                "nombre": fake.text(max_nb_chars=20),
+                "fabricante": fake.company(),
+                "sku": fake.sbn9(),
+                "cantidad": cantidad,
+                "valor_unitario": valor_unitario,
+                "valor_al_por_mayor": valor_unitario * cantidad,
+                "disponible": fake.pybool(),
+                "es_alta_demanda": fake.pybool()
+            }
+            productos_list.append(producto)
+
+        return jsonify(productos_list)
+
 api.add_resource(VistaProductos, '/productos')
     
 
