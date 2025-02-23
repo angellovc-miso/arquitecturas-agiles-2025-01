@@ -1,10 +1,16 @@
 from . import create_app
+from flask import jsonify
 from flask_restful import Api, Resource
 from healthcheck import HealthCheck, EnvironmentDump
 import psutil
 import os
 import random
+import flask_monitoringdashboard as dashboard
+from faker import Faker
+import time
+import logging
 
+fake = Faker()
 ACCEPTED_CPU = os.getenv("ACCEPTED_CPU", float("90"))
 ACCEPTED_MEMORY_RAM = os.getenv("ACCEPTED_MEMORY_RAM", float("90"))
 ACCEPTED_DYSC = os.getenv("ACCEPTED_MEMORY_RAM", float("99.6"))
@@ -70,3 +76,5 @@ def check_system_health():
     }
 
 app.add_url_rule("/healthcheck", "healthcheck", view_func=lambda: health.run())
+dashboard.config.init_from(file='config.cfg')
+dashboard.bind(app)
