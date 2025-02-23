@@ -1,4 +1,4 @@
-from monitor_sync import create_app
+from . import create_app
 from apscheduler.schedulers.background import BackgroundScheduler
 import requests
 import time
