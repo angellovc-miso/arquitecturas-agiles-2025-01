@@ -2,22 +2,47 @@ from . import create_app
 from apscheduler.schedulers.background import BackgroundScheduler
 import requests
 import time
+import os
+import json
+
+ENDPOINT_PRODUCTOS = os.getenv("ENDPOINT_PRODUCTOS", 'http://127.0.0.1:5002/healthcheck')
 
 app = create_app('default')
 app_context = app.app_context()
 app_context.push()
 
+
+# URL del Webhook (reemplázala con tu URL)
+webhook_url = 'https://hooks.slack.com/services/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'
+
+# El mensaje que deseas enviar
+mensaje = {
+    "text": "¡Está fallando productos! por favor revisar. :warning:"
+}
+
+
 def check_health():
     try:
         print("Verificando estado del microservicio...")
-        response = requests.get('https://productos-dd34100bf79d.herokuapp.com/healthcheck')
+        response = requests.get(ENDPOINT_PRODUCTOS)
+        print(f"Estado del microservicio: {response.text}")
         if response.status_code == 200:
             print("Microservicio funcionando correctamente.")
         else:
             print(f"Error al verificar el microservicio. Código de estado: {response.status_code}")
+            send_message_to_slack("Error al verificar el microservicio.")
     except requests.exceptions.RequestException as e:
         print(f"Error al conectar con el microservicio: {e}")
 
+def send_message_to_slack(message):
+    # Enviar el mensaje a Slack
+    response = requests.post(webhook_url, data=json.dumps(mensaje))
+
+    # Verificar que el mensaje se haya enviado correctamente
+    if response.status_code == 200:
+        print("Mensaje enviado exitosamente.")
+    else:
+        print(f"Error al enviar mensaje de slack: {response.status_code}")
 
 # Configurar el scheduler
 scheduler = BackgroundScheduler()
