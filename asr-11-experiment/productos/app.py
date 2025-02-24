@@ -71,6 +71,9 @@ class VistaProductos(Resource):
 
         return jsonify(productos_list)
 
+if len(productos_slow_logs) > 1000:
+    productos_slow_logs.clear()
+
 api.add_resource(VistaProductos, '/productos')
     
 
