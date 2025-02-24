@@ -13,7 +13,7 @@ app_context.push()
 
 
 # URL del Webhook (reemplázala con tu URL)
-webhook_url = 'https://hooks.slack.com/services/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'
+webhook_url = os.getenv("WEBHOOK_SLACK", 'https://hooks.slack.com/services/T00000000/B00000000/XXXXXXXXXXXXXXXXXXXXXXXX')
 
 # El mensaje que deseas enviar
 mensaje = {
