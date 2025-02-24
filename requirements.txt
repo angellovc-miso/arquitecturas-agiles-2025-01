@@ -26,6 +26,5 @@ numpy==2.2.3
 scipy==1.15.2
 sqlalchemy==2.0.38
 typing-extensions==4.12.2
-tzlocal==2.0.0
 faker==36.1.1
 tzdata==2025.1
