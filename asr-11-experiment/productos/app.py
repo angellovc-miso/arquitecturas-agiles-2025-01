@@ -26,12 +26,13 @@ envdump = EnvironmentDump()
 
 api = Api(app)
 
+# En el futuro esta variable debe guardarse en una DB de logs.
 productos_slow_logs = []
 
 class VistaProductos(Resource):
     def get(self):
         startTime = datetime.now()
-        delay_ms = random.randint(5000, 6000)
+        delay_ms = random.randint(1000, 7000)
         time.sleep(delay_ms / 1000.0)
         productos_list = []
 
@@ -123,11 +124,9 @@ def check_products_health():
         return True, 'No hay demoras en la API de productos'
 
     latest_log_entry = productos_slow_logs[-1]
-    latest_log_entry_failedTime = datetime.fromisoformat(latest_log_entry['requestTime'])
-    thirty_seconds_before = now - timedelta(seconds=30)
 
-    # Si la nueva entrada al log ocurrió en los ultimos 30 segundos devolver false
-    if thirty_seconds_before <= latest_log_entry_failedTime <= now:
+    # Si la nueva entrada al log se demoro más de 5 segundos en responder
+    if latest_log_entry['elapsedTime'] > 5000:
         return False, {
             'latest_response_time': latest_log_entry['elapsedTime'],
             'products_amount': latest_log_entry['productsLength']
