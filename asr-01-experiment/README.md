@@ -31,7 +31,7 @@ El componente de votación detectará y enmascará
 
 ---
 
-***Correr el experimento***
+***Correr el experimento en local***
 
 1. Una vez en la raiz del experimento, correr el comando
   ```
@@ -55,3 +55,16 @@ El componente de votación detectará y enmascará
 
   El reporte debe aparecer con el nombre de report.html
   
+  ***Correr el experimento usando componentes desplegados***
+
+  1. Una vez en la raiz del experimento, correr el comando
+  ```
+    npm install
+  ```
+  Esto instalará todas las dependencias necesarias para correr el experimento
+
+  2. Cuando todas las dependencias de NodeJS estén instaladas, es momento de correr el experimento pasando cómo parámetro la del componente voting desplegado en Heroku   
+  
+  ```
+    ENVIOS_API=https://voting-arquitectura-3f8603cc8c5b.herokuapp.com node experiment.js
+  ```

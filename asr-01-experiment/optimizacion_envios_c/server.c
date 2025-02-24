@@ -3,7 +3,8 @@
 #include <string.h>
 #include <stdlib.h>
 
-#define PORT 3000
+#define DEFAULT_PORT 3000 
+
 
 enum MHD_Result request_handler(void *cls, struct MHD_Connection *connection,
                                 const char *url, const char *method,
@@ -33,6 +34,10 @@ enum MHD_Result request_handler(void *cls, struct MHD_Connection *connection,
 }
 
 int main() {
+
+    const char *port_str = getenv("PORT");
+    int PORT = (port_str != NULL) ? atoi(port_str) : DEFAULT_PORT;
+
     struct MHD_Daemon *server = MHD_start_daemon(MHD_USE_THREAD_PER_CONNECTION, PORT, NULL, NULL,
                                                  &request_handler, NULL, MHD_OPTION_END);
     if (!server) {
