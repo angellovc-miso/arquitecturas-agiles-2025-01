@@ -13,7 +13,7 @@ MarkupSafe==3.0.2
 psutil==7.0.0
 py-healthcheck==1.10.1
 pytz==2025.1
-requests==2.32.3
+requests==2.31.0
 six==1.17.0
 tzlocal==5.3
 urllib3==2.3.0
