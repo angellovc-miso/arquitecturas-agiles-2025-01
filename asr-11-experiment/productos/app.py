@@ -66,6 +66,8 @@ class VistaProductos(Resource):
             productos_slow_logs.append(log_entry)
             logging.warning(f"Request took {elapsedTime} ms, which is longer than expected.")
             # enviar mensaje por slack
+        else:
+            productos_slow_logs.append(log_entry)
 
         return jsonify(productos_list)
 
