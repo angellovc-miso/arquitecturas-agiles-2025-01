@@ -126,7 +126,6 @@ def check_products_health():
     latest_log_entry_failedTime = datetime.fromisoformat(latest_log_entry['requestTime'])
     thirty_seconds_before = now - timedelta(seconds=30)
 
-    print('thirty_seconds_before', thirty_seconds_before, latest_log_entry_failedTime, now, thirty_seconds_before <= latest_log_entry_failedTime <= now)
     # Si la nueva entrada al log ocurrió en los ultimos 30 segundos devolver false
     if thirty_seconds_before <= latest_log_entry_failedTime <= now:
         return False, {
