@@ -5,7 +5,7 @@ from healthcheck import HealthCheck, EnvironmentDump
 import psutil
 import os
 import random
-import flask_monitoringdashboard as dashboard
+#import flask_monitoringdashboard as dashboard
 from faker import Faker
 import time
 from datetime import timedelta, datetime
@@ -138,5 +138,5 @@ def check_products_health():
 
 app.add_url_rule("/healthcheck", "healthcheck", view_func=lambda: health.run())
 
-dashboard.config.init_from(file='config.cfg')
-dashboard.bind(app)
+#dashboard.config.init_from(file='config.cfg')
+#dashboard.bind(app)
