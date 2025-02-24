@@ -8,6 +8,7 @@ import random
 import flask_monitoringdashboard as dashboard
 from faker import Faker
 import time
+from datetime import timedelta, datetime
 import logging
 
 fake = Faker()
@@ -25,10 +26,12 @@ envdump = EnvironmentDump()
 
 api = Api(app)
 
+productos_slow_logs = []
+
 class VistaProductos(Resource):
     def get(self):
-        startTime = time.time()
-        delay_ms = random.randint(300, 6000)
+        startTime = datetime.now()
+        delay_ms = random.randint(5000, 6000)
         time.sleep(delay_ms / 1000.0)
         productos_list = []
 
@@ -47,10 +50,19 @@ class VistaProductos(Resource):
             }
             productos_list.append(producto)
 
-        endTime = time.time()
+        endTime = datetime.now()
         elapsedTime = endTime - startTime
 
+        elapsedTime_ms = int(elapsedTime.total_seconds() * 1000)  # Convert to milliseconds
+
+        log_entry = {
+            'requestTime': startTime.isoformat(),
+            'elapsedTime': elapsedTime_ms,
+            'productsLength': len(productos_list)
+        }
+
         if delay_ms > 5000:
+            productos_slow_logs.append(log_entry)
             logging.warning(f"Request took {elapsedTime} ms, which is longer than expected.")
             # enviar mensaje por slack
 
@@ -102,6 +114,29 @@ def check_system_health():
         'disk_usage': f'{disk_usage.percent}%'
     }
 
+@health.add_check
+def check_products_health():
+    #  Si hay nuevas entradas en productos_slow_logs avisar al monitor
+    now = datetime.now()
+
+    if len(productos_slow_logs) == 0:
+        return True, 'No hay demoras en la API de productos'
+
+    latest_log_entry = productos_slow_logs[-1]
+    latest_log_entry_failedTime = datetime.fromisoformat(latest_log_entry['requestTime'])
+    thirty_seconds_before = now - timedelta(seconds=30)
+
+    print('thirty_seconds_before', thirty_seconds_before, latest_log_entry_failedTime, now, thirty_seconds_before <= latest_log_entry_failedTime <= now)
+    # Si la nueva entrada al log ocurrió en los ultimos 30 segundos devolver false
+    if thirty_seconds_before <= latest_log_entry_failedTime <= now:
+        return False, {
+            'latest_response_time': latest_log_entry['elapsedTime'],
+            'products_amount': latest_log_entry['productsLength']
+        }
+    else:
+        return True, 'No hay demoras en la API de productos'
+
 app.add_url_rule("/healthcheck", "healthcheck", view_func=lambda: health.run())
+
 dashboard.config.init_from(file='config.cfg')
 dashboard.bind(app)
