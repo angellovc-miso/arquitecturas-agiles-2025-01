@@ -15,7 +15,7 @@ fake = Faker()
 ACCEPTED_CPU = os.getenv("ACCEPTED_CPU", float("90"))
 ACCEPTED_MEMORY_RAM = os.getenv("ACCEPTED_MEMORY_RAM", float("90"))
 ACCEPTED_DYSC = os.getenv("ACCEPTED_MEMORY_RAM", float("99.6"))
-PROBABILIDAD = os.getenv("PROBABILIDAD", float("0.5"))
+PROBABILIDAD = os.getenv("PROBABILIDAD", float("0.7"))
 
 app = create_app('default')
 app_context = app.app_context()
