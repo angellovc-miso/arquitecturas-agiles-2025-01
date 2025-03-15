@@ -7,10 +7,6 @@ app = create_app('default')
 app_context = app.app_context()
 app_context.push()
 
-# @app.route('/')
-# def hello_world():
-#     return 'Hello World!'
-
 api = Api(app)
 
 db.init_app(app)
