@@ -1,0 +1,1 @@
+web: gunicorn sec_experiment.administrador_usuarios_service.app:app
