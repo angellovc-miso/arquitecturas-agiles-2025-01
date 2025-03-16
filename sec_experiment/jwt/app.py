@@ -37,8 +37,7 @@ url = 'http://127.0.0.1:5000'
 class AuthService(Resource):
 
     def post(self):
-        contrasena_encriptada = hashlib.md5(request.json["contrasena"].encode('utf-8')).hexdigest()
-        response = requests.post(url+"/usuario/obtener", json={"nombre": request.json["nombre"], "contrasena": contrasena_encriptada})
+        response = requests.post(url+"/usuario/obtener", json={"nombre": request.json["nombre"], "contrasena": request.json['contrasena']})
 
         if response.status_code != 200:
             return {"mensaje": "El usuario no existe"}, 404
