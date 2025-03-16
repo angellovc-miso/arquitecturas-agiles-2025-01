@@ -3,6 +3,9 @@ from apscheduler.schedulers.background import BackgroundScheduler
 import os
 import random
 import requests
+import smtplib
+from email.mime.text import MIMEText
+from email.mime.multipart import MIMEMultipart
 
 app = create_app('default')
 app_context = app.app_context()
@@ -35,6 +38,7 @@ def check_logs():
         if validacion and usuario_aleatorio:
             usuario = usuario_aleatorio
             bloquear_usuario(usuario)
+            enviar_correo(usuario)
 
     except requests.exceptions.RequestException as e:
         print(f"Error al conectar con el microservicio: {e}")
@@ -45,7 +49,7 @@ def bloquear_usuario(usuario):
     if response.status_code == 200:
         print(f"Token de {usuario} borrado correctamente.")
     else:
-        print(f"Error al eliminarl el token usuario {usuario}. Código de estado: {response.status_code}")
+        print(f"Error al eliminar el token usuario {usuario}. Código de estado: {response.status_code}")
 
     print(f"Bloqueando usuario: {usuario}")
     response = requests.put(ENDPOINT_BLOQUEO, json={"nombre": usuario})
@@ -55,6 +59,47 @@ def bloquear_usuario(usuario):
         print(f"Error al bloquear el usuario {usuario}. Código de estado: {response.status_code}")
     
 
+def enviar_correo(usuario):
+    # Configuración de la cuenta de correo y servidor SMTP
+    smtp_server = "smtp.gmail.com"
+    smtp_port = 587  # Puerto para TLS
+    sender_email = "davids88899@gmail.com"  # Tu correo
+    password = "qrrb ddny qwns yjjf"  # contraseña de aplicación
+    receiver_email = "davids_8899@hotmail.com"  # Correo del destinatario
+
+    # Crea el mensaje del correo
+    subject = "Bloqueo de cuenta"
+    body = "Alerta: acabamos de bloquear tu correo por detección de fraude."
+
+    # Crear un objeto MIMEMultipart para el mensaje
+    message = MIMEMultipart()
+    message["From"] = sender_email
+    message["To"] = receiver_email
+    message["Subject"] = subject
+
+    # Agregar el cuerpo del mensaje al correo
+    message.attach(MIMEText(body, "plain"))
+
+    # Conectar al servidor SMTP y enviar el correo
+    try:
+        # Conexión con el servidor SMTP de Gmail
+        server = smtplib.SMTP(smtp_server, smtp_port)
+        server.starttls()  # Iniciar la encriptación TLS
+
+        # Iniciar sesión en el servidor
+        server.login(sender_email, password)
+
+        # Enviar el correo
+        server.sendmail(sender_email, receiver_email, message.as_string())
+
+        print("Correo enviado con éxito")
+
+    except Exception as e:
+        print(f"Error al enviar el correo: {e}")
+
+    finally:
+        # Cerrar la conexión con el servidor SMTP
+        server.quit()
 
 # Configurar el scheduler
 scheduler = BackgroundScheduler()
