@@ -7,6 +7,7 @@ import hashlib
 import requests
 import jwt as jwt_lib
 import json
+import os
 
 db = SQLAlchemy()
 app = Flask(__name__)
@@ -31,13 +32,12 @@ db.create_all()
 
 jwt = JWTManager(app)
 
-
-url = 'http://127.0.0.1:5000'
+ENDPOINT_USUARIOS = os.getenv("ENDPOINT_USUARIOS", 'http://127.0.0.1:5000/usuario/obtener')
 
 class AuthService(Resource):
 
     def post(self):
-        response = requests.post(url+"/usuario/obtener", json={"nombre": request.json["nombre"], "contrasena": request.json['contrasena']})
+        response = requests.post(ENDPOINT_USUARIOS, json={"nombre": request.json["nombre"], "contrasena": request.json['contrasena']})
 
         if response.status_code != 200:
             return {"mensaje": "El usuario no existe"}, 404
