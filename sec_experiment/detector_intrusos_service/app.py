@@ -1,4 +1,4 @@
-from detector_intrusos_service import create_app
+from . import create_app
 from apscheduler.schedulers.background import BackgroundScheduler
 import os
 import random
@@ -12,8 +12,8 @@ app_context = app.app_context()
 app_context.push()
 
 ENDPOINT_lOGS = os.getenv("ENDPOINT_lOGS", 'http://127.0.0.1:5004/log')
-ENDPOINT_LOGOUT = os.getenv("ENDPOINT_lOGS", 'http://127.0.0.1:5001/ccpauth/logout')
-ENDPOINT_BLOQUEO = os.getenv("ENDPOINT_lOGS", 'http://127.0.0.1:5000/usuario/bloquear')
+ENDPOINT_LOGOUT = os.getenv("ENDPOINT_LOGOUT", 'http://127.0.0.1:5001/ccpauth/logout')
+ENDPOINT_BLOQUEO = os.getenv("ENDPOINT_BLOQUEO", 'http://127.0.0.1:5000/usuario/bloquear')
 
 def check_logs():
     try:
