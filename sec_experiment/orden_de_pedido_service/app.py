@@ -16,6 +16,8 @@ db.create_all()
 
 api.add_resource(VistaOrdenesPedido, '/pedidos')
 
+jwt = JWTManager(app)
+
 with app.app_context():
     pedido_prueba = Pedido(
         nombre = 'cerveza',

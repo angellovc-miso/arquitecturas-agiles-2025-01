@@ -13,6 +13,9 @@ def create_app(config_name):
 
     app.config["JWT_SECRET_KEY"] = "secret-jwt"  # Change this!
     app.config["JWT_VERIFY_SUB"] = False
+    app.config['JWT_TOKEN_LOCATION'] = ['headers']
+    app.config['JWT_HEADER_NAME'] = 'Authorization'
+    app.config['JWT_HEADER_TYPE'] = 'Bearer'
     app.config['PROPAGATE_EXCEPTIONS']=True
     return app
 

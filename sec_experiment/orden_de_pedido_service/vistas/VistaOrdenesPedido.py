@@ -1,6 +1,5 @@
 from flask_restful import Resource
 from flask_jwt_extended import jwt_required, get_jwt
-from orden_de_pedido_service.modelos.OrdenPedidoSchema import OrdenPedido, orden_pedido_schema
 from flask import request
 import requests
 
