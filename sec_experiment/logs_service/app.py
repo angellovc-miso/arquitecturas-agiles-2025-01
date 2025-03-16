@@ -1,4 +1,4 @@
-from logs_service import create_app
+from . import create_app
 from flask_restful import Resource, Api
 from flask import request
 from .modelos.log import Log, LogSchema
