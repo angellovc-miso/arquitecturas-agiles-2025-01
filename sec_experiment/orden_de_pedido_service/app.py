@@ -1,7 +1,7 @@
-from orden_de_pedido_service import create_app, db
+from . import create_app, db
 from flask_restful import Api
 
-from orden_de_pedido_service.vistas.VistaOrdenesPedido import VistaOrdenesPedido
+from .vistas.VistaOrdenesPedido import VistaOrdenesPedido
 
 app = create_app('default')
 app_context = app.app_context()
