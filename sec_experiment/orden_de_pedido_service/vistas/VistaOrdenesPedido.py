@@ -1,5 +1,5 @@
 from flask_restful import Resource
-from flask_jwt_extended import jwt_required, get_jwt
+from flask_jwt_extended import jwt_required, get_jwt, get_jwt_identity
 from flask import request
 import requests
 
@@ -10,10 +10,12 @@ from flask_restful import Resource, reqparse
 from flask import request, jsonify
 from sqlalchemy.exc import SQLAlchemyError
 from marshmallow import ValidationError
+import requests
+import json
 
 
 url = 'http://127.0.0.1:5001'
-
+url_logs = 'http://127.0.0.1:5004/log'
 
 class VistaOrdenesPedido(Resource):
 
@@ -23,23 +25,32 @@ class VistaOrdenesPedido(Resource):
             # Fetch all records from the database
             ordenes = db.session.query(OrdenPedido).all()
             # Serialize using Marshmallow schema
-
-            # Validar token
-            # headers = {
-            #     'Authorization': f"{request.headers.get('Authorization')}"  # Aquí usamos el token que se pasó
-            # }     
-            # response = requests.get(url+"/ccpauth", headers=headers)
-            # if response.status_code != 200:
-            #     return {"msg": "Error de autenticación", "error": response.text}, 500
-        
             result = [orden_pedido_schema.dump(orden) for orden in ordenes]
             return result, 200
         except SQLAlchemyError as e:
             print(e)
             return {"message": f"Database error: {str(e)}"}, 500
 
-
+    @jwt_required()
     def post(self):
+        usuario = json.loads(get_jwt_identity())  # Esto devuelve el diccionario completo
+           
+        # Extraer el nombre
+        nombre =  usuario["nombre"]
+
+        print(nombre)
+        log = "El usuario " + nombre + " entró a crear órdenes de pedido"
+        # Guardar logs
+        response = requests.post(url_logs, json={"log": log, "microservicio": "orden_de_pedido_service", "usuario": nombre})
+
+        # Validar token
+        headers = {
+            'Authorization': f"{request.headers.get('Authorization')}"  # Aquí usamos el token que se pasó
+        }     
+        response = requests.get(url+"/ccpauth", headers=headers)
+        if response.status_code != 200:
+            return {"msg": "Error de autenticación", "error": response.text}, 500
+
         data = request.get_json()
 
         # Deserialize and validate incoming data
