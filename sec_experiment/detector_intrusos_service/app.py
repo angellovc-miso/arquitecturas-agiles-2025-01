@@ -10,6 +10,7 @@ app_context.push()
 
 ENDPOINT_lOGS = os.getenv("ENDPOINT_lOGS", 'http://127.0.0.1:5004/log')
 ENDPOINT_LOGOUT = os.getenv("ENDPOINT_lOGS", 'http://127.0.0.1:5001/ccpauth/logout')
+ENDPOINT_BLOQUEO = os.getenv("ENDPOINT_lOGS", 'http://127.0.0.1:5000/usuario/bloquear')
 
 def check_logs():
     try:
@@ -39,12 +40,19 @@ def check_logs():
         print(f"Error al conectar con el microservicio: {e}")
 
 def bloquear_usuario(usuario):
-    print(f"Bloqueando usuario: {usuario}")
+    print(f"Eliminando token de usuario: {usuario}")
     response = requests.post(ENDPOINT_LOGOUT, json={"nombre": usuario})
+    if response.status_code == 200:
+        print(f"Token de {usuario} borrado correctamente.")
+    else:
+        print(f"Error al eliminarl el token usuario {usuario}. Código de estado: {response.status_code}")
+
+    print(f"Bloqueando usuario: {usuario}")
+    response = requests.put(ENDPOINT_BLOQUEO, json={"nombre": usuario})
     if response.status_code == 200:
         print(f"Usuario {usuario} bloqueado correctamente.")
     else:
-        print(f"Error al bloquear usuario {usuario}. Código de estado: {response.status_code}")
+        print(f"Error al bloquear el usuario {usuario}. Código de estado: {response.status_code}")
     
 
 

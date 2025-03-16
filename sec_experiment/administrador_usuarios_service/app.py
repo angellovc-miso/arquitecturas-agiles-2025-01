@@ -39,15 +39,26 @@ class VistaUsuario(Resource):
 class VistaUsuarioObtener(Resource):
 
     def post(self):
-        contrasena_encriptada = hashlib.md5(request.json["contrasena"].encode('utf-8')).hexdigest()
-        usuario = Usuario.query.filter(Usuario.nombre == request.json["nombre"], Usuario.contrasena == contrasena_encriptada).first()
+        usuario = Usuario.query.filter(Usuario.nombre == request.json["nombre"], Usuario.contrasena == request.json["contrasena"], Usuario.activo == True).first()
         if usuario is None:
-            return {"mensaje": "El usuario no existe"}, 404
+            return {"mensaje": "El usuario no existe o está bloqueado"}, 404
         return UsuarioSchema().dump(usuario)
     
+class VistaUsuarioBloquear(Resource):
+    
+    def put(self):
+        usuario = Usuario.query.filter(Usuario.nombre == request.json["nombre"]).first()
+        if usuario is None:
+            return {"mensaje": "El usuario no existe"}, 400
+        
+        usuario.activo = False
+        db.session.commit()
+
+        return {"mensaje": "Usuario bloqueado exitosamente", "id": usuario.id, "rol": usuario.rol}
 
 api.add_resource(VistaUsuario, '/usuario/crear')
 api.add_resource(VistaUsuarioObtener, '/usuario/obtener')
+api.add_resource(VistaUsuarioBloquear, '/usuario/bloquear')
         
         
             
