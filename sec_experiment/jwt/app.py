@@ -6,6 +6,7 @@ from flask_sqlalchemy import SQLAlchemy
 import hashlib
 import requests
 import jwt as jwt_lib
+import json
 
 db = SQLAlchemy()
 app = Flask(__name__)
@@ -44,7 +45,7 @@ class AuthService(Resource):
         usuario = response.json()
         print(usuario)
 
-        token_de_acceso = create_access_token(identity=str({"id": usuario["id"], "rol": usuario["rol"]}))
+        token_de_acceso = create_access_token(identity=json.dumps({"id": usuario["id"], "rol": usuario["rol"], "nombre": usuario["nombre"]}))
         
         # Decodificar el token de acceso para obtener el 'jti'
         decoded_token = jwt_lib.decode(token_de_acceso, app.config['JWT_SECRET_KEY'], algorithms=["HS256"])
