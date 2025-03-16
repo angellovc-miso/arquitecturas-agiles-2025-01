@@ -1,0 +1,59 @@
+
+  <!DOCTYPE html>
+  <html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <title>Resistencia - Autenticación/Autorización Report</title>
+    <style>
+      body { font-family: Arial, sans-serif; padding: 20px; }
+      h1 { color: #333; }
+      .result { padding: 10px; background-color: #eee; display: inline-block; margin-bottom: 20px; }
+      table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+      th, td { border: 1px solid #ddd; padding: 8px; }
+      th { background-color: #f4f4f4; }
+      tr:nth-child(even) { background-color: #f9f9f9; }
+    </style>
+  </head>
+  <body>
+    <h1>Resistencia - Autenticación/Autorización</h1>
+    <p>Este test busca entender la capacidad del sistema, usando las tácticas de autenticaicón y autorización para resistir el tampering en el servicio de ordenes</p>
+    <div class="result"><strong>Result:</strong> Passed</div>
+
+    <h2>Logs</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Log</th>
+          <th>Microservice</th>
+          <th>User</th>
+        </tr>
+      </thead>
+      <tbody>
+        
+          <tr>
+            <td>57</td>
+            <td>El usuario CoolWolf4663834 entró a crear órdenes de pedido</td>
+            <td>orden_de_pedido_service</td>
+            <td>CoolWolf4663834</td>
+          </tr>
+        
+          <tr>
+            <td>58</td>
+            <td>El usuario CoolWolf4663834 con rol VENDEDOR editó la orden 43 con status EstadoPedido.ABIERTO. for seller 54</td>
+            <td>orden_de_pedido_service</td>
+            <td>CoolWolf4663834</td>
+          </tr>
+        
+          <tr>
+            <td>59</td>
+            <td>El usuario CoolWolf4663834 con rol VENDEDOR trató de editar la orden cerrada 43</td>
+            <td>orden_de_pedido_service</td>
+            <td>CoolWolf4663834</td>
+          </tr>
+        
+      </tbody>
+    </table>
+  </body>
+  </html>
+  

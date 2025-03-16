@@ -1,0 +1,59 @@
+
+  <!DOCTYPE html>
+  <html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <title>Detección - detección de intrusos Report</title>
+    <style>
+      body { font-family: Arial, sans-serif; padding: 20px; }
+      h1 { color: #333; }
+      .result { padding: 10px; background-color: #eee; display: inline-block; margin-bottom: 20px; }
+      table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+      th, td { border: 1px solid #ddd; padding: 8px; }
+      th { background-color: #f4f4f4; }
+      tr:nth-child(even) { background-color: #f9f9f9; }
+    </style>
+  </head>
+  <body>
+    <h1>Detección - detección de intrusos</h1>
+    <p>Busca entender la capacidad del sistema para detectar intrusos que han logrado suplantar otros usuarios y buscan hacer tampering sobre el servicio de ordenes. Estos resultados nos ayudan a entender el impacto del tampering una vez que se ha producido el ataque de manera exitosa</p>
+    <div class="result"><strong>Result:</strong> Failed</div>
+
+    <h2>Logs</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Log</th>
+          <th>Microservice</th>
+          <th>User</th>
+        </tr>
+      </thead>
+      <tbody>
+        
+          <tr>
+            <td>62</td>
+            <td>El usuario SmartEagle357032 con rol ADMINISTRADOR editó la orden 44 con status EstadoPedido.CERRADO. for seller 56</td>
+            <td>orden_de_pedido_service</td>
+            <td>SmartEagle357032</td>
+          </tr>
+        
+          <tr>
+            <td>63</td>
+            <td>El usuario SmartEagle357032 con rol ADMINISTRADOR editó la orden 44 con status EstadoPedido.CERRADO. for seller 56</td>
+            <td>orden_de_pedido_service</td>
+            <td>SmartEagle357032</td>
+          </tr>
+        
+          <tr>
+            <td>64</td>
+            <td>El usuario SmartEagle357032 con rol ADMINISTRADOR editó la orden 44 con status EstadoPedido.CERRADO. for seller 56</td>
+            <td>orden_de_pedido_service</td>
+            <td>SmartEagle357032</td>
+          </tr>
+        
+      </tbody>
+    </table>
+  </body>
+  </html>
+  
