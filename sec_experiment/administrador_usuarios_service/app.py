@@ -1,4 +1,4 @@
-from administrador_usuarios_service import create_app
+from . import create_app
 from flask_restful import Resource, Api
 from flask import Flask, request
 import hashlib
