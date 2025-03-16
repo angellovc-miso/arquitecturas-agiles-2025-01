@@ -5,6 +5,7 @@ from flask import request
 import requests
 
 url = 'http://127.0.0.1:5001'
+# from orden_de_pedido_service.modelos.OrdenPedidoSchema import Pedido, orden_pedido_schema
 
 class VistaOrdenesPedido(Resource):
 

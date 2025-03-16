@@ -1,6 +1,7 @@
-from flask_restful import Resource
 from marshmallow_sqlalchemy import SQLAlchemyAutoSchema
-from orden_de_pedido_service import db
+from .. import db
+from sqlalchemy.orm import Mapped, mapped_column
+from .ClienteSchema import Cliente
 import enum
 
 class Pago(enum.Enum):
@@ -14,13 +15,13 @@ class EstadoPedido(enum.Enum):
     ABIERTO = 'ABIERTO'
     CERRADO = 'CERRADO'
 
-class OrdenPedido(Resource):
-    name: db.Column(db.String)
-    ubicacion: db.Column(db.String)
-    tipoDePago: db.Column(db.Enum(Pago))
-    estado: db.Column(db.Enum(EstadoPedido))
-    notas: db.Column(db.String)
-    cliente: db.relationship('Cliente')
+class Pedido(db.Model):
+    id: Mapped[int] = mapped_column(primary_key=True)
+    nombre: Mapped[str] = mapped_column(db.String)
+    tipoDePago: Mapped[str] = mapped_column(db.Enum(Pago))
+    estado: Mapped[str] = mapped_column(db.Enum(EstadoPedido))
+    cliente_id = mapped_column(db.Integer, db.ForeignKey("cliente.id"))
+    # vendedor: db.relationship('Vendedor')
 
 class OrdenPedidoSchema(SQLAlchemyAutoSchema):
     class Meta:
