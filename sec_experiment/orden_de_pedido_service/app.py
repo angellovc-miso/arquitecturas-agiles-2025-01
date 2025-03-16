@@ -1,5 +1,6 @@
 from . import create_app, db
 from flask_restful import Api
+from flask_jwt_extended import JWTManager
 
 from .vistas.VistaOrdenesPedido import VistaOrdenesPedido
 
@@ -13,3 +14,5 @@ db.init_app(app)
 db.create_all()
 
 api.add_resource(VistaOrdenesPedido, '/pedidos')
+
+jwt = JWTManager(app)

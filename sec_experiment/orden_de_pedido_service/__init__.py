@@ -7,7 +7,8 @@ def create_app(config_name):
     app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///ordenes_pedido.db'
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
-    app.config['JWT_SECRET_KEY']='frase-secreta'
+    app.config["JWT_SECRET_KEY"] = "secret-jwt"  # Change this!
+    app.config["JWT_VERIFY_SUB"] = False
     app.config['PROPAGATE_EXCEPTIONS']=True
     return app
 
