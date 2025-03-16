@@ -1,7 +1,5 @@
 from marshmallow_sqlalchemy import SQLAlchemyAutoSchema
 from sqlalchemy.orm import Mapped, mapped_column
-from .ClienteSchema import Cliente
-from .VendedorSchema import Vendedor
 from marshmallow import fields
 from .. import db
 import enum
@@ -19,14 +17,12 @@ class EstadoPedido(enum.Enum):
 
 class Pedido(db.Model):
     id: Mapped[int] = mapped_column(primary_key=True)
-    nombre: Mapped[str] = mapped_column(db.String)
+    nombre: Mapped[str] = mapped_column(db.String, nullable=True)
     tipoDePago: Mapped[str] = mapped_column(db.Enum(Pago))
     estado: Mapped[str] = mapped_column(db.Enum(EstadoPedido))
-    cliente_id = mapped_column(db.Integer, db.ForeignKey("cliente.id"))
-    vendedor_id = mapped_column(db.Integer, db.ForeignKey("vendedor.id"))
     productos = db.Column(db.JSON, default=[])
-    # cliente_id = mapped_column(db.Integer, db.ForeignKey("cliente.id"))
-    # cliente = db.relationship('Cliente')
+    cliente_id = db.Column(db.Integer, nullable=False)
+    vendedor_id = db.Column(db.Integer, nullable=True)
 
 class EnumMap(fields.Field):
     def _serialize(self, value, attr, obj, **kwargs):
@@ -36,10 +32,9 @@ class EnumMap(fields.Field):
 
 class OrdenPedidoSchema(SQLAlchemyAutoSchema):
     tipoDePago = EnumMap(attribute=('tipoDePago'))
-    estado = EnumMap(attribute=('estadoPedido'))
+    estado = EnumMap(attribute='estado')
     class Meta:
         model = Pedido
-        include_relationships = True
         load_instance = True
 
 
