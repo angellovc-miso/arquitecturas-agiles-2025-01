@@ -21,7 +21,7 @@ def check_logs():
         logs = data.get('logs', [])
         usuario_aleatorio = None
         if logs:
-            print(f"Analizando logs.")
+            print(f"Se encontraron {len(logs)} logs.")
             usuarios = [log['usuario'] for log in logs]  # Extrae todos los usuarios
             usuario_aleatorio = random.choice(usuarios)  # Selecciona un usuario aleatorio
         else:
