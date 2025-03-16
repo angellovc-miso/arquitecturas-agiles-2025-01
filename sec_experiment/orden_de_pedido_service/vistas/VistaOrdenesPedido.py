@@ -127,7 +127,7 @@ class VistaOrdenPedido(Resource):
                 response = requests.post(ENDPOINT_LOGS, json={"log": log, "microservicio": "orden_de_pedido_service", "usuario": user.get('nombre')})
 
                 return {"message": "No puedes modificar pedidos cerrados"}, 403
-            log = f"El usuario {user.get('nombre')} con rol {user.get('rol')} editó la orden {pedido.id} con status {pedido.estado}. for seller {pedido.vendedor_id}"
+            log = f"El usuario {user.get('nombre')} con rol {user.get('rol')} editó la orden {pedido.id} con status {pedido.estado}. La orden pertenece al vendedor {pedido.vendedor_id}"
             response = requests.post(ENDPOINT_LOGS, json={"log": log, "microservicio": "orden_de_pedido_service", "usuario": user.get('nombre')})
             requests.get(f"{DETECTION_SERVICE_API}?username={user.get('nombre')}")
             data = request.get_json()
