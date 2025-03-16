@@ -39,7 +39,8 @@ class VistaUsuario(Resource):
 class VistaUsuarioObtener(Resource):
 
     def post(self):
-        usuario = Usuario.query.filter(Usuario.nombre == request.json["nombre"], Usuario.contrasena == request.json["contrasena"]).first()
+        contrasena_encriptada = hashlib.md5(request.json["contrasena"].encode('utf-8')).hexdigest()
+        usuario = Usuario.query.filter(Usuario.nombre == request.json["nombre"], Usuario.contrasena == contrasena_encriptada).first()
         if usuario is None:
             return {"mensaje": "El usuario no existe"}, 404
         return UsuarioSchema().dump(usuario)
