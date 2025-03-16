@@ -111,7 +111,7 @@ const test2 = async () => {
             order.productos.push('Shampoo');
             const { status } = await updateOrder(order, authTokenAdmin);        
         } catch(error) {
-            if (error.response.data.msg.includes('"Error de autenticación"')) {
+            if (error.response.data.msg.includes('Error de autenticación')) {
                 testDetails.result = 'Passed'
             } else {
                 testDetails.result = 'Failed'
