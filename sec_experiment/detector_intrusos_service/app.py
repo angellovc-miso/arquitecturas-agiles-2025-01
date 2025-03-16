@@ -8,19 +8,31 @@ app = create_app('default')
 app_context = app.app_context()
 app_context.push()
 
-ENDPOINT_lOGS = os.getenv("ENDPOINT_lOGS", 'http://127.0.0.1:5002/logs')
+ENDPOINT_lOGS = os.getenv("ENDPOINT_lOGS", 'http://127.0.0.1:5004/log')
 ENDPOINT_LOGOUT = os.getenv("ENDPOINT_lOGS", 'http://127.0.0.1:5001/ccpauth/logout')
 
 def check_logs():
     try:
         print("Verificando logs pedidos...")
-        #response = requests.get(ENDPOINT_lOGS)
+        response = requests.get(ENDPOINT_lOGS)
+        data = response.json()
+
+        # Extrae la lista de logs
+        logs = data.get('logs', [])
+        usuario_aleatorio = None
+        if logs:
+            print(f"Analizando logs.")
+            usuarios = [log['usuario'] for log in logs]  # Extrae todos los usuarios
+            usuario_aleatorio = random.choice(usuarios)  # Selecciona un usuario aleatorio
+        else:
+            print("No hay logs disponibles.")
+
         validacion = False
         if random.random() < 0.7:
             validacion = True
 
-        if validacion:
-            usuario = "david"
+        if validacion and usuario_aleatorio:
+            usuario = usuario_aleatorio
             bloquear_usuario(usuario)
 
     except requests.exceptions.RequestException as e:
