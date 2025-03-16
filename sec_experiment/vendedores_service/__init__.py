@@ -1,5 +1,10 @@
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy.orm import DeclarativeBase
+
+class Base(DeclarativeBase):
+    __allow_unmapped__ = True
+    pass
 
 
 def create_app(config_name):
@@ -9,6 +14,7 @@ def create_app(config_name):
 
     app.config['JWT_SECRET_KEY']='frase-secreta'
     app.config['PROPAGATE_EXCEPTIONS']=True
+    app.config["JWT_ACCESS_TOKEN_EXPIRES"] = False
     return app
 
-db = SQLAlchemy()
+db = SQLAlchemy(model_class=Base)

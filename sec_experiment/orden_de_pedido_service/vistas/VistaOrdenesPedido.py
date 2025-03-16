@@ -1,5 +1,5 @@
 from flask_restful import Resource
-from orden_de_pedido_service.modelos.OrdenPedidoSchema import OrdenPedido, orden_pedido_schema
+# from orden_de_pedido_service.modelos.OrdenPedidoSchema import Pedido, orden_pedido_schema
 
 class VistaOrdenesPedido(Resource):
 
