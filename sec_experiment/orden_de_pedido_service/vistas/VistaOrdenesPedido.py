@@ -16,6 +16,24 @@ class VistaOrdenesPedido(Resource):
 
     @jwt_required()
     def get(self):
+        usuario = json.loads(get_jwt_identity())  # Esto devuelve el diccionario completo
+
+        # Extraer el nombre
+        nombre =  usuario["nombre"]
+
+        print(nombre)
+        log = "El usuario " + nombre + " entró a ver órdenes de pedido"
+        # Guardar logs
+        response = requests.post(url_logs, json={"log": log, "microservicio": "orden_de_pedido_service", "usuario": nombre})
+
+        # Validar token
+        headers = {
+            'Authorization': f"{request.headers.get('Authorization')}"  # Aquí usamos el token que se pasó
+        }
+        response = requests.get(url+"/ccpauth", headers=headers)
+        if response.status_code != 200:
+            return {"msg": "Error de autenticación", "error": response.text}, 500
+        
         try:
             # Fetch all records from the database
             ordenes = db.session.query(Pedido).all()
