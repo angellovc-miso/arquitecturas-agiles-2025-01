@@ -1,13 +1,8 @@
+from ..modelos.OrdenPedidoSchema import Pedido, orden_pedido_schema, Pago, EstadoPedido
+from .. import db
 from flask_restful import Resource
-from flask_jwt_extended import jwt_required, get_jwt, get_jwt_identity
+from flask_jwt_extended import jwt_required, get_jwt_identity
 from flask import request
-import requests
-
-# from orden_de_pedido_service.modelos.OrdenPedidoSchema import Pedido, orden_pedido_schema
-from orden_de_pedido_service.modelos.OrdenPedidoSchema import OrdenPedido, orden_pedido_schema, Pago, EstadoPedido
-from orden_de_pedido_service import db
-from flask_restful import Resource, reqparse
-from flask import request, jsonify
 from sqlalchemy.exc import SQLAlchemyError
 from marshmallow import ValidationError
 import requests
@@ -23,7 +18,7 @@ class VistaOrdenesPedido(Resource):
     def get(self):
         try:
             # Fetch all records from the database
-            ordenes = db.session.query(OrdenPedido).all()
+            ordenes = db.session.query(Pedido).all()
             # Serialize using Marshmallow schema
             result = [orden_pedido_schema.dump(orden) for orden in ordenes]
             return result, 200
@@ -34,7 +29,7 @@ class VistaOrdenesPedido(Resource):
     @jwt_required()
     def post(self):
         usuario = json.loads(get_jwt_identity())  # Esto devuelve el diccionario completo
-           
+
         # Extraer el nombre
         nombre =  usuario["nombre"]
 
@@ -46,7 +41,7 @@ class VistaOrdenesPedido(Resource):
         # Validar token
         headers = {
             'Authorization': f"{request.headers.get('Authorization')}"  # Aquí usamos el token que se pasó
-        }     
+        }
         response = requests.get(url+"/ccpauth", headers=headers)
         if response.status_code != 200:
             return {"msg": "Error de autenticación", "error": response.text}, 500
