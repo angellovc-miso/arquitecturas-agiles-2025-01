@@ -1,13 +1,8 @@
+from flask_jwt_extended import jwt_required
+from ..modelos.OrdenPedidoSchema import Pedido, orden_pedido_schema, Pago, EstadoPedido
+from .. import db
 from flask_restful import Resource
-from flask_jwt_extended import jwt_required, get_jwt
 from flask import request
-import requests
-
-# from orden_de_pedido_service.modelos.OrdenPedidoSchema import Pedido, orden_pedido_schema
-from orden_de_pedido_service.modelos.OrdenPedidoSchema import OrdenPedido, orden_pedido_schema, Pago, EstadoPedido
-from orden_de_pedido_service import db
-from flask_restful import Resource, reqparse
-from flask import request, jsonify
 from sqlalchemy.exc import SQLAlchemyError
 from marshmallow import ValidationError
 
@@ -21,7 +16,7 @@ class VistaOrdenesPedido(Resource):
     def get(self):
         try:
             # Fetch all records from the database
-            ordenes = db.session.query(OrdenPedido).all()
+            ordenes = db.session.query(Pedido).all()
             # Serialize using Marshmallow schema
 
             # Validar token

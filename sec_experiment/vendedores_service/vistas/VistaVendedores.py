@@ -1,7 +1,8 @@
 from flask import request
 from flask_restful import Resource
 from flask_jwt_extended import jwt_required
-from ..modelos.VendedorSchema import Vendedor, VendedorSchema
+from ..modelos.OrdenPedidoSchema import Vendedor
+from ..modelos.VendedorSchema import VendedorSchema
 from .. import db
 
 vendedor_schema = VendedorSchema()
@@ -10,13 +11,13 @@ class VistaVendedores(Resource):
 
     @jwt_required()
     def get(self):
-        posts = Vendedor.query.all()
-        return VendedorSchema.dump(posts)
+        vendedores = Vendedor.query.all()
+        return VendedorSchema.dump(vendedores)
 
     @jwt_required()
     def post(self):
         new_user = Vendedor(
-            username=request.json['username'],
+            usuario=request.json['username'],
         )
         db.session.add(new_user)
         db.session.commit()

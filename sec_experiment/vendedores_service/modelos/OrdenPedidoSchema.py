@@ -1,9 +1,7 @@
 from marshmallow_sqlalchemy import SQLAlchemyAutoSchema
-from sqlalchemy.orm import Mapped, mapped_column
-from .ClienteSchema import Cliente
-from .VendedorSchema import Vendedor
-from marshmallow import fields
 from .. import db
+from sqlalchemy.orm import Mapped, mapped_column, relationship
+from .ClienteSchema import Cliente
 import enum
 
 class Pago(enum.Enum):
@@ -24,23 +22,15 @@ class Pedido(db.Model):
     estado: Mapped[str] = mapped_column(db.Enum(EstadoPedido))
     cliente_id = mapped_column(db.Integer, db.ForeignKey("cliente.id"))
     vendedor_id = mapped_column(db.Integer, db.ForeignKey("vendedor.id"))
-    productos = db.Column(db.JSON, default=[])
-    # cliente_id = mapped_column(db.Integer, db.ForeignKey("cliente.id"))
-    # cliente = db.relationship('Cliente')
 
-class EnumMap(fields.Field):
-    def _serialize(self, value, attr, obj, **kwargs):
-        if value is None:
-            return None
-        return {value.name: value.value}
+class Vendedor(db.Model):
+    id: Mapped[int] = mapped_column(primary_key=True)
+    usuario: Mapped[str] = mapped_column(db.String)
+    password: Mapped[str] = mapped_column(db.String(32))
+    pedidos = relationship("Pedido")
 
 class OrdenPedidoSchema(SQLAlchemyAutoSchema):
-    tipoDePago = EnumMap(attribute=('tipoDePago'))
-    estado = EnumMap(attribute=('estadoPedido'))
     class Meta:
-        model = Pedido
-        include_relationships = True
-        load_instance = True
+        fields = ["id", "name", "ubicacion", "tipoDePago", "estado", "notas"]
 
-
-orden_pedido_schema = OrdenPedidoSchema(session=db.session)
+orden_pedido_schema = OrdenPedidoSchema()

@@ -1,6 +1,9 @@
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy.orm import DeclarativeBase
 
+class Base(DeclarativeBase):
+    pass
 
 def create_app(config_name):
     app = Flask(__name__)
@@ -11,4 +14,4 @@ def create_app(config_name):
     app.config['PROPAGATE_EXCEPTIONS']=True
     return app
 
-db = SQLAlchemy()
+db = SQLAlchemy(model_class=Base)
