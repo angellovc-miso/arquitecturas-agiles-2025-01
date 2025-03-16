@@ -7,10 +7,10 @@ from sqlalchemy.exc import SQLAlchemyError
 from marshmallow import ValidationError
 import requests
 import json
+import os
 
-
-url = 'http://127.0.0.1:5001'
-url_logs = 'http://127.0.0.1:5004/log'
+ENDPOINT_JWT = os.getenv("ENDPOINT_JWT", 'http://127.0.0.1:5001/ccpauth')
+ENDPOINT_LOGS = os.getenv("ENDPOINT_LOGS", 'http://127.0.0.1:5004/log')
 
 class VistaOrdenesPedido(Resource):
 
@@ -24,13 +24,13 @@ class VistaOrdenesPedido(Resource):
         print(nombre)
         log = "El usuario " + nombre + " entró a ver órdenes de pedido"
         # Guardar logs
-        response = requests.post(url_logs, json={"log": log, "microservicio": "orden_de_pedido_service", "usuario": nombre})
+        response = requests.post(ENDPOINT_LOGS, json={"log": log, "microservicio": "orden_de_pedido_service", "usuario": nombre})
 
         # Validar token
         headers = {
             'Authorization': f"{request.headers.get('Authorization')}"  # Aquí usamos el token que se pasó
         }
-        response = requests.get(url+"/ccpauth", headers=headers)
+        response = requests.get(ENDPOINT_JWT, headers=headers)
         if response.status_code != 200:
             return {"msg": "Error de autenticación", "error": response.text}, 500
         
@@ -54,13 +54,13 @@ class VistaOrdenesPedido(Resource):
         print(nombre)
         log = "El usuario " + nombre + " entró a crear órdenes de pedido"
         # Guardar logs
-        response = requests.post(url_logs, json={"log": log, "microservicio": "orden_de_pedido_service", "usuario": nombre})
+        response = requests.post(ENDPOINT_LOGS, json={"log": log, "microservicio": "orden_de_pedido_service", "usuario": nombre})
 
         # Validar token
         headers = {
             'Authorization': f"{request.headers.get('Authorization')}"  # Aquí usamos el token que se pasó
         }
-        response = requests.get(url+"/ccpauth", headers=headers)
+        response = requests.get(ENDPOINT_JWT, headers=headers)
         if response.status_code != 200:
             return {"msg": "Error de autenticación", "error": response.text}, 500
 
