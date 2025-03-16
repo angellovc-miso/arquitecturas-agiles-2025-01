@@ -25,12 +25,12 @@ class VistaOrdenesPedido(Resource):
             # Serialize using Marshmallow schema
 
             # Validar token
-            headers = {
-                'Authorization': f"{request.headers.get('Authorization')}"  # Aquí usamos el token que se pasó
-            }     
-            response = requests.get(url+"/ccpauth", headers=headers)
-            if response.status_code != 200:
-                return {"msg": "Error de autenticación", "error": response.text}, 500
+            # headers = {
+            #     'Authorization': f"{request.headers.get('Authorization')}"  # Aquí usamos el token que se pasó
+            # }     
+            # response = requests.get(url+"/ccpauth", headers=headers)
+            # if response.status_code != 200:
+            #     return {"msg": "Error de autenticación", "error": response.text}, 500
         
             result = [orden_pedido_schema.dump(orden) for orden in ordenes]
             return result, 200
