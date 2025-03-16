@@ -31,7 +31,7 @@ class OrdenPedido(db.Model):
     estado = db.Column(db.Enum(EstadoPedido))
     notas = db.Column(db.String, nullable=True)
     productos = db.Column(db.JSON, default=[])
-    cliente_id = mapped_column(db.Integer, db.ForeignKey("cliente.id"))
+    # cliente_id = mapped_column(db.Integer, db.ForeignKey("cliente.id"))
     # cliente = db.relationship('Cliente')
 
 class EnumMap(fields.Field):
@@ -47,8 +47,6 @@ class OrdenPedidoSchema(SQLAlchemyAutoSchema):
         model = OrdenPedido
         include_relationships = True
         load_instance = True
-        # fields = ["id", "name", "ubicacion", "tipoDePago", "estado", "notas", "productos"]
-
 
 
 orden_pedido_schema = OrdenPedidoSchema(session=db.session)

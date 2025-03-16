@@ -26,7 +26,7 @@ class VistaOrdenesPedido(Resource):
 
             # Validar token
             headers = {
-                'Authorization': f'{request.headers.get('Authorization')}'  # Aquí usamos el token que se pasó
+                'Authorization': f"{request.headers.get('Authorization')}"  # Aquí usamos el token que se pasó
             }     
             response = requests.get(url+"/ccpauth", headers=headers)
             if response.status_code != 200:
