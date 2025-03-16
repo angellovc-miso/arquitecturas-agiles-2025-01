@@ -37,9 +37,9 @@ class VistaUsuario(Resource):
         return {"mensaje": "Usuario creado exitosamente", "id": nuevo_usuario.id, "rol": nuevo_usuario.rol}
     
 class VistaUsuarioObtener(Resource):
-
     def post(self):
-        usuario = Usuario.query.filter(Usuario.nombre == request.json["nombre"], Usuario.contrasena == hashlib.md5(request.json["contrasena"].encode('utf-8')).hexdigest(), Usuario.activo == True).first()
+        contrasena_encriptada = hashlib.md5(request.json["contrasena"].encode('utf-8')).hexdigest()
+        usuario = Usuario.query.filter(Usuario.nombre == request.json["nombre"], Usuario.contrasena == contrasena_encriptada, Usuario.activo == 1).first()
         if usuario is None:
             return {"mensaje": "El usuario no existe o está bloqueado"}, 404
         return UsuarioSchema().dump(usuario)

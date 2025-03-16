@@ -24,10 +24,15 @@ class VistaLog(Resource):
         return {"mensaje": "Log creado exitosamente", "id": nuevo_log.id}
     
     def get(self):
-        logs = Log.query.all()
+        usuario = request.args.get('usuario')
+
+        if usuario:
+            logs = Log.query.filter_by(usuario=usuario).all()
+        else:
+            logs = Log.query.all()
+
         log_schema = LogSchema(many=True)
         return {"logs": log_schema.dump(logs)}
-    
 
 api.add_resource(VistaLog, '/log')
         

@@ -32,7 +32,7 @@ db.create_all()
 
 jwt = JWTManager(app)
 
-ENDPOINT_USUARIOS = os.getenv("ENDPOINT_USUARIOS", 'http://127.0.0.1:5000/usuario/obtener')
+ENDPOINT_USUARIOS = os.getenv("ENDPOINT_USUARIOS", 'http://127.0.0.1:3000/usuario/obtener')
 
 class AuthService(Resource):
 

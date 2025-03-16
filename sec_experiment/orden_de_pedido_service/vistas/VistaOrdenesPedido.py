@@ -9,8 +9,10 @@ import requests
 import json
 import os
 
-ENDPOINT_JWT = os.getenv("ENDPOINT_JWT", 'http://127.0.0.1:5001/ccpauth')
-ENDPOINT_LOGS = os.getenv("ENDPOINT_LOGS", 'http://127.0.0.1:5004/log')
+ENDPOINT_JWT = os.getenv("ENDPOINT_JWT", 'http://127.0.0.1:3001/ccpauth')
+ENDPOINT_LOGS = os.getenv("ENDPOINT_LOGS", 'http://127.0.0.1:3003/log')
+DETECTION_SERVICE_API = os.getenv("DETECTION_SERVICE_API", 'http://127.0.0.1:3004/detect_impersonation')
+
 
 class VistaOrdenesPedido(Resource):
 
@@ -86,4 +88,61 @@ class VistaOrdenesPedido(Resource):
         except SQLAlchemyError as e:
             print(e)
             db.session.rollback()
+            return {"message": f"Database error: {str(e)}"}, 500
+        
+
+class VistaOrdenPedido(Resource):
+    
+    @jwt_required()
+    def get(self, id):
+        try:
+            pedido = db.session.query(Pedido).filter(Pedido.id == id).first()
+            if pedido:
+                result = orden_pedido_schema.dump(pedido)
+                return result, 200
+            else:
+                return {"message": "Pedido no encontrado"}, 404
+        except SQLAlchemyError as e:
+            print(e)
+            return {"message": f"Database error: {str(e)}"}, 500
+
+    @jwt_required()
+    def put(self, id):
+        try:
+            user = json.loads(get_jwt_identity())  # Esto devuelve el diccionario completo
+            # Validar token
+            headers = {
+                'Authorization': f"{request.headers.get('Authorization')}"  # Aquí usamos el token que se pasó
+            }
+            response = requests.get(ENDPOINT_JWT, headers=headers)
+            if response.status_code != 200:
+                return {"msg": "Error de autenticación", "error": response.text}, 500
+    
+            pedido = db.session.query(Pedido).filter(Pedido.id == id).first()
+            if not pedido:
+                return {"message": "Pedido not found"}, 404
+            if pedido.estado is EstadoPedido.CERRADO and user['rol'] != 'ADMINISTRADOR':
+                log = f"El usuario {user.get('nombre')} con rol {user.get('rol')} trató de editar la orden cerrada {pedido.id}"
+                # Guardar logs
+                response = requests.post(ENDPOINT_LOGS, json={"log": log, "microservicio": "orden_de_pedido_service", "usuario": user.get('nombre')})
+
+                return {"message": "No puedes modificar pedidos cerrados"}, 403
+            log = f"El usuario {user.get('nombre')} con rol {user.get('rol')} editó la orden {pedido.id} con status {pedido.estado}. for seller {pedido.vendedor_id}"
+            response = requests.post(ENDPOINT_LOGS, json={"log": log, "microservicio": "orden_de_pedido_service", "usuario": user.get('nombre')})
+            requests.get(f"{DETECTION_SERVICE_API}?username={user.get('nombre')}")
+            data = request.get_json()
+            try:
+                # Partial update (only update provided fields)
+                updated_pedido = orden_pedido_schema.load(data, instance=pedido, partial=True)
+            except ValidationError as err:
+                print(err)
+                return {"message": "Validation Error", "errors": err.messages}, 400
+
+            db.session.commit()
+            result = orden_pedido_schema.dump(updated_pedido)
+            return result, 200
+
+        except SQLAlchemyError as e:
+            db.session.rollback()
+            print(e)
             return {"message": f"Database error: {str(e)}"}, 500

@@ -4,6 +4,7 @@ import os
 import random
 import requests
 import smtplib
+from flask import request
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 
@@ -11,9 +12,9 @@ app = create_app('default')
 app_context = app.app_context()
 app_context.push()
 
-ENDPOINT_lOGS = os.getenv("ENDPOINT_lOGS", 'http://127.0.0.1:5004/log')
-ENDPOINT_LOGOUT = os.getenv("ENDPOINT_LOGOUT", 'http://127.0.0.1:5001/ccpauth/logout')
-ENDPOINT_BLOQUEO = os.getenv("ENDPOINT_BLOQUEO", 'http://127.0.0.1:5000/usuario/bloquear')
+ENDPOINT_lOGS = os.getenv("ENDPOINT_lOGS", 'http://127.0.0.1:3003/log')
+ENDPOINT_LOGOUT = os.getenv("ENDPOINT_LOGOUT", 'http://127.0.0.1:3001/ccpauth/logout')
+ENDPOINT_BLOQUEO = os.getenv("ENDPOINT_BLOQUEO", 'http://127.0.0.1:3000/usuario/bloquear')
 
 def check_logs():
     try:
@@ -105,7 +106,7 @@ def enviar_correo(usuario):
 scheduler = BackgroundScheduler()
 
 # Agregar un trabajo al scheduler para que ejecute check_health cada 30 segundos
-scheduler.add_job(func=check_logs, trigger="interval", seconds=30)
+# scheduler.add_job(func=check_logs, ktrigger="interval", seconds=30)
 
 
 # Iniciar el scheduler en el primer request
@@ -117,6 +118,25 @@ def start_scheduler():
 @app.route('/')
 def home():
     return "Microservicio monitor funcionando correctamente."
+
+@app.route('/detect_impersonation', methods=['GET'])
+def impersonation():
+    username = request.args.get('username')  # Get the username from query parameters
+    if username:
+        response = requests.get(f"{ENDPOINT_lOGS}?usuario={username}")
+        data = response.json()
+        filtered_logs = [entry for entry in data.get('logs') if entry['usuario'] == username]
+        occurrences = 0
+        for log in filtered_logs:
+            if "CERRADO" in log.get('log') and "ADMINISTRADOR" in log.get('log'):
+                occurrences += 1
+        if occurrences > 2:
+            bloquear_usuario(username)
+            return f"Detectó suplantador {username}"
+        return "suplantador no detectado"
+    else:
+        return "No se proporcionó un usuario para verificar.", 400
+
 
 if __name__ == '__main__':
 
