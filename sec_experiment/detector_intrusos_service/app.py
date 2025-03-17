@@ -106,7 +106,7 @@ def enviar_correo(usuario):
 scheduler = BackgroundScheduler()
 
 # Agregar un trabajo al scheduler para que ejecute check_health cada 30 segundos
-scheduler.add_job(func=check_logs, ktrigger="interval", seconds=30)
+scheduler.add_job(func=check_logs, trigger="interval", seconds=30)
 
 
 # Iniciar el scheduler en el primer request
