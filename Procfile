@@ -1,1 +1,1 @@
-web: gunicorn sec_experiment.detector_intrusos_service.app:app
+web: gunicorn sec_experiment.administrador_usuarios_service.app:app
