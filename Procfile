@@ -1,1 +1,1 @@
-web: gunicorn sec_experiment.logs_service.app:app
+web: gunicorn sec_experiment.orden_de_pedido_service.app:app
